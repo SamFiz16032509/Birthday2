@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Forever Love 👑</title>
+    <style>
+        :root {
+            --bg-light-pink: #ffe4e1;
+            --bg-sky-blue: #e0f7fa;
+            --bg-white: #ffffff;
+            --pink-dark: #d81b60;
+            --pink-med: #ff4d6d;
+            --gold: #b8860b;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Georgia', serif;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden; color: #333;
+            background: linear-gradient(-45deg, var(--bg-light-pink), var(--bg-white), var(--bg-sky-blue), var(--bg-light-pink));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #romantic-rain {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .falling-item {
+            position: absolute; 
+            color: var(--pink-med);
+            user-select: none; top: -50px;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.8));
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        #fireworks-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2; display: none; pointer-events: none;
+        }
+
+        .firework-spark {
+            position: fixed;
+            font-size: 50px !important;
+            filter: drop-shadow(0 0 15px white);
+            z-index: -1;
+        }
+
+        #music-btn {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            background: rgba(255,255,255,0.9); padding: 12px;
+            border-radius: 50%; cursor: pointer; border: 2px solid var(--pink-dark);
+        }
+
+        .slide {
+            position: absolute; width: 90%; max-width: 450px; text-align: center;
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 90vh;
+        }
+
+        .hidden { opacity: 0; transform: translateY(100px) scale(0.9); pointer-events: none; }
+        .active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95); padding: 30px;
+            border-radius: 25px; color: #333; border: 2px solid #ffccd5;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        h1 { color: var(--pink-dark); margin: 0; font-size: 1.6rem; }
+        .shayari { font-style: italic; color: #555; line-height: 1.5; margin: 15px 0; }
+
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-light-pink);
+            z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+        }
+
+        #timer { 
+            font-size: 2.2rem; 
+            color: var(--pink-dark); 
+            margin: 15px 0; 
+            font-family: 'Courier New', monospace; 
+            font-weight: bold;
+        }
+
+        .pass-input { padding: 12px; border-radius: 10px; border: 2px solid var(--pink-light); width: 80%; text-align: center; font-size: 1.2rem; margin-top: 10px; background: white; color: #333; }
+
+        .big-frame { background: #fff; padding: 10px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 5px solid white; margin-bottom: 20px; position: relative; }
+        .big-frame img { width: 100%; height: 380px; object-fit: cover; border-radius: 10px; }
+        .caption-frame { background: rgba(216, 27, 96, 0.85); padding: 15px; color: white; border-radius: 12px; margin-top: -35px; position: relative; z-index: 10; }
+
+        .btn { background: var(--pink-dark); color: white; border: none; padding: 14px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; font-size: 1rem; }
+        .promise-list { text-align: left; background: #fff9f0; padding: 15px; border-radius: 15px; border-left: 4px solid var(--gold); margin: 15px 0; }
+        .promise-item { margin-bottom: 10px; font-size: 0.9rem; color: #333; display: flex; align-items: flex-start; }
+        .promise-item:before { content: "✨ "; margin-right: 8px; }
+    </style>
+</head>
+<body>
+
+    <div id="romantic-rain"></div>
+    <div id="fireworks-container"></div>
+
+    <div id="lock-screen">
+        <div class="lock-card card">
+            <h1>🔒 Locked</h1>
+            <p>Counting down to your big day (unlocks automatically when its your day):</p>
+            <div id="timer">00d 00h 00m 00s</div>
+            <hr style="border: 0.5px solid #eee; margin: 20px 0;">
+            <p style="margin: 0; font-size: 0.9rem; color: var(--pink-dark);">Only for my Queen's Eyes:</p>
+            <input type="password" id="passCode" class="pass-input" placeholder="Enter Password">
+            <button class="btn" onclick="checkPassword()">Unlock the Surprise ❤️</button>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop><source src="Song.mp3" type="audio/mpeg"></audio>
+    <div id="music-btn" onclick="toggleMusic()">🎵</div>
+
+    <div id="s1" class="slide hidden">
+        <div class="card">
+            <h1>Assalamu Alaikum, Jaan ❤️</h1>
+            <p class="shayari">"Har pal teri yaad ka ehsaas hai,<br>Ab toh lagta hai tu har dum mere paas hai."</p>
+            <button class="btn" onclick="goTo(2)">Start Our Story 📖</button>
+        </div>
+    </div>
+
+    <div id="s2" class="slide hidden">
+        <div class="big-frame"><img src="Photo1.jpg"></div>
+        <div class="caption-frame">
+            <p>Our First Chapter ✨</p>
+            <p style="font-size:0.8rem;">The day my life changed forever. I knew from the start that you were special.</p>
+        </div>
+        <button class="btn" onclick="goTo(3)">Next Memory</button>
+    </div>
+
+    <div id="s3" class="slide hidden">
+        <div class="big-frame"><img src="photo2.jpg"></div>
+        <div class="caption-frame">
+            <p>Your Infinite Smile 😍</p>
+            <p style="font-size:0.8rem;">This smile is my favorite view in the whole world. It brightens even my darkest days.</p>
+        </div>
+        <button class="btn" onclick="goTo(4)">Continue...</button>
+    </div>
+
+    <div id="s4" class="slide hidden">
+        <div class="big-frame"><img src="photo3.jpg"></div>
+        <div class="caption-frame">
+            <p>Adventure with You ✈️</p>
+            <p style="font-size:0.8rem;">Every journey is a beautiful story when I'm holding your hand. Let's explore forever together.</p>
+        </div>
+        <button class="btn" onclick="goTo(5)">Keep Going...</button>
+    </div>
+
+    <div id="s5" class="slide hidden">
+        <div class="big-frame"><img src="photo4.jpg"></div>
+        <div class="caption-frame">
+            <p>Pure Love ❤️</p>
+            <p style="font-size:0.8rem;">In your eyes, I found my home. In your heart, I found my peace. I love you infinitely.</p>
+        </div>
+        <button class="btn" onclick="goTo(6)">More ✨</button>
+    </div>
+
+    <div id="s6" class="slide hidden">
+        <div class="big-frame"><img src="photo5.jpg"></div>
+        <div class="caption-frame">
+            <p>My Best Friend 🥂</p>
+            <p style="font-size:0.8rem;">Beyond being my wife, you are my soulmate and my best friend. Thank you for everything.</p>
+        </div>
+        <button class="btn" onclick="goTo(7)">Almost there...</button>
+    </div>
+
+    <div id="s7" class="slide hidden">
+        <div class="big-frame"><img src="photo6.jpg"></div>
+        <div class="caption-frame">
+            <p>The Peace of 'Us' 🏠</p>
+            <p style="font-size:0.8rem;">The world disappears when it's just you and me. You are my safe haven.</p>
+        </div>
+        <button class="btn" onclick="goTo(8)">One Last One...</button>
+    </div>
+
+    <div id="s8" class="slide hidden">
+        <div class="big-frame"><img src="photo7.jpg"></div>
+        <div class="caption-frame">
+            <p>To Infinity & Beyond ♾️</p>
+            <p style="font-size:0.8rem;">Every second with you is a blessing. I look forward to 100 more years of us.</p>
+        </div>
+        <button class="btn" onclick="goTo(9)">Next: My Vows 🕯️</button>
+    </div>
+
+    <div id="s9" class="slide hidden">
+        <div class="card">
+            <h1 style="color:var(--gold);">My Promises to You ✨</h1>
+            <div class="promise-list">
+                <div class="promise-item">Mai appko promise karta hu ki mai appka sath kav v nahi chodunga.</div>
+                <div class="promise-item">Mai promise karta hu ki mera pyaar kav v appke liya kam nahi hoga ji cahe kuch v ho jaye.</div>
+                <div class="promise-item">Mai promise karta hu ki mai appka hath nahi chodunga aur appko kav v akela nahi chorunga ji.</div>
+                <div class="promise-item">Mai promise karta hu ki mai appke khushi k liye kuch v karunga ji.</div>
+                <div class="promise-item">I promise to love you more with every heartbeat.</div>
+            </div>
+            <button class="btn" onclick="goTo(10)">The Finale 🎂</button>
+        </div>
+    </div>
+
+    <div id="s10" class="slide hidden">
+        <div class="card">
+            <h1>Happy Birthday, My Lifeline, My Jaan, Meri Begum, Meri Musti, Meri sab kuch......</h1>
+            <p class="shayari">"Khuda aapko wo sab kuch de,<br>Jo aapki duaon mein ho."</p>
+            <div id="gift-box" style="font-size: 60px; cursor: pointer;" onclick="revealGift()">🎁</div>
+            <div id="gift-reveal" style="display:none; border: 2px dashed var(--gold); padding: 15px; border-radius: 15px; margin-top: 10px;">
+                <h3 style="color:var(--gold); margin:0;">MY GIFT TO YOU</h3>
+                <p>A Special Dinner & Shopping Trip!🛍️ when we meet</p>
+            </div>
+            <p style="margin-top:20px;"><b>Always yours, Hubby Samir 😘</b></p>
+            <button class="btn" onclick="restart()">Relive the Love?</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Set her Birthday Date here ---
+        const birthdayDate = "March 16, 2026 00:00:00"; 
+        const correctPassword = "ILoveYouMustiJi"; 
+
+        const song = document.getElementById('bgMusic');
+        let playing = false;
+
+        function unlockContent() {
+            document.getElementById("lock-screen").style.display = "none";
+            document.getElementById("s1").classList.remove('hidden');
+            document.getElementById("s1").classList.add('active');
+            startContinuousRain();
+        }
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const distance = new Date(birthdayDate).getTime() - now;
+            if (distance <= 0) {
+                unlockContent();
+            } else {
+                const d = Math.floor(distance / (86400000));
+                const h = Math.floor((distance % 86400000) / 3600000);
+                const m = Math.floor((distance % 3600000) / 60000);
+                const s = Math.floor((distance % 60000) / 1000);
+                document.getElementById("timer").innerHTML = d + "d " + h + "h " + m + "m " + s + "s";
+            }
+        }, 1000);
+
+        function checkPassword() {
+            if (document.getElementById("passCode").value === correctPassword) {
+                unlockContent();
+            } else {
+                alert("Musti ji thoda wait kar lo pata chal jayega isske andar kiya hai, Tension mat lo ji, jo v hai bahut accha hai ji");
+            }
+        }
+
+        function startContinuousRain() {
+            const rainContainer = document.getElementById('romantic-rain');
+            const items = ['❤️', '🌸', '🌹', '💖'];
+            setInterval(() => {
+                const el = document.createElement('div');
+                el.classList.add('falling-item');
+                el.innerHTML = items[Math.floor(Math.random() * items.length)];
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.fontSize = (Math.random() * 30 + 30) + 'px';
+                el.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                rainContainer.appendChild(el);
+                setTimeout(() => el.remove(), 6000);
+            }, 300);
+        }
+
+        function triggerFireworks() {
+            const container = document.getElementById('fireworks-container');
+            container.style.display = 'block';
+            setInterval(() => {
+                for (let i = 0; i < 15; i++) {
+                    const spark = document.createElement('div');
+                    spark.classList.add('firework-spark');
+                    spark.innerHTML = ['✨','💥','⭐'][Math.floor(Math.random()*3)];
+                    spark.style.color = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                    spark.style.left = (Math.random() * 100) + 'vw';
+                    spark.style.top = (Math.random() * 100) + 'vh';
+                    spark.style.position = 'fixed';
+                    spark.style.animation = `fall ${Math.random() * 2 + 1}s ease-out forwards`;
+                    document.body.appendChild(spark);
+                    setTimeout(() => spark.remove(), 2000);
+                }
+            }, 1000);
+        }
+
+        function toggleMusic() {
+            if(!playing) { song.play(); document.getElementById('music-btn').innerHTML = "🎶"; } 
+            else { song.pause(); document.getElementById('music-btn').innerHTML = "🎵"; }
+            playing = !playing;
+        }
+
+        function goTo(num) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.replace('active', 'hidden'));
+            document.getElementById('s' + num).classList.replace('hidden', 'active');
+            if(num === 10) triggerFireworks();
+            if(!playing) toggleMusic();
+        }
+
+        function revealGift() {
+            document.getElementById('gift-box').style.display = 'none';
+            document.getElementById('gift-reveal').style.display = 'block';
+        }
+
+        function restart() { location.reload(); }
+    </script>
+</body>
+</html>
